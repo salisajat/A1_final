@@ -1,174 +1,122 @@
-// texture for the particle
-var particle_texture = null;
-
-// variable holding our particle system
-var ps = null;
-
-function preload() {
-    particle_texture = loadImage("particle_texture.png");
+function setup(){
+  createCanvas(710, 400, WEBGL);
 }
 
-function setup() {
+function draw(){
+  background(0);
+  var radius = width * 1.5;
+  
+  //drag to move the world.
+  orbitControl();
+  //  var locX = mouseX - height / 2;
+  // var locY = mouseY - width / 2;
 
-    //set the canvas size
-    createCanvas(640,360);
+  // ambientLight(60, 60, 60);
+  // pointLight(255, 255, 255, locX, locY, 100);
 
-    //initialize our particle system
-    ps = new ParticleSystem(0,createVector(width / 2, height - 60),particle_texture);
-}
+ // noStroke();
+ stroke(random(200,255));  
+  fill(0,0);
+ // normalMaterial();
 
-function draw() {
-    background(0);
+  translate(0, 0, -600);
+  for (var e = 0; e <=2; e ++){
 
-    var dx = map(mouseX,0,width,-0.2,0.2);
-    var wind = createVector(dx,0);
+    for(var i = 0; i <= 12; i++){
+    for(var j = 0; j <= 12; j++){
+      push();
+       var a = j/12 * PI;
+      var b = i/12 * PI;
+      var x = sin(2 * a) * radius * sin(b); 
+      var y = cos(b) * radius / 2 ;
+      var z = cos(2 * a) * radius * sin(b); 
+      translate(x,y,z);
 
-    ps.applyForce(wind);
-    ps.run();
-    for (var i = 0; i < 2; i++) {
-        ps.addParticle();
+        if (x < 0) { 
+          translate (frameCount*-map(x, 0, 710/2, 0, -0.2), 0, 0); 
+        } else { 
+          translate (frameCount*map(x, 0, 710/2, -0.2, 0 ), 0,0); 
+          }
+
+        if (y < 200) { 
+          translate (0, frameCount*map(y, 0, 400/2, -0.2, 0), 0); 
+        } else { 
+          translate (0, frameCount*map(y, 400/2, 400, -0.2, 0 ), 0); 
+          }
+
+         if (z < 0) { 
+          translate (0, 0, frameCount*-map(y, 0, 400/2, -0.2, 0)); 
+        } else { 
+          translate (0, 0, frameCount*map(y, 400/2, 400, -0.2, 0 )); 
+          }
+
+      cone(30,30);
+       
+      sphere(5,5,5);
+       
+      pop();  
     }
+  }
+    translate(x,y,z);
+    scale(0.5,0.5,0.5);
 
-    // Draw an arrow representing the wind force
-    drawVector(wind, createVector(width/2,50,0),500);
+        if (x < 710/2) { 
+          translate (frameCount*map(x, 0, 710/2, 0, -0.2), 0, 0); 
+        } else { 
+          translate (frameCount*map(x, 710/2, 710, -0.2, 0 ), 0,0); 
+          }
+
+        if (y < 200) { 
+          translate (0, frameCount*map(y, 0, 400/2, -0.2, 0), 0); 
+        } else { 
+          translate (0, frameCount*map(y, 400/2, 400, -0.2, 0 ), 0); 
+          }
+
+         if (z < 0) { 
+          translate (0, 0, frameCount*map(y, 0, 500/2, -0.2, 0)); 
+        } else { 
+          translate (0, 0, frameCount*-map(y, 500/2, 500, 0, 0.2)); 
+          }
+}
 }
 
-/**
- *  This function draws an arrow showing the direction our "wind" is blowing.
- */
-function drawVector(v,loc,scale){
-    push();
-    var arrowsize = 4;
-    translate(loc.x,loc.y);
-    stroke(255);
-    rotate(v.heading());
+//   for(var i = 0; i <= 12; i++){
+//     for(var j = 0; j <= 12; j++){
+//       push();
+//        var a = j/12 * PI;
+//       var b = i/12 * PI;
+//       translate( random(map(a, 0, 16, -1000, 1000)) , random(map(a, 0, 16, -1000, 1000)), random(map(a, 0, 16, -1000, 1000))); 
+// rotateZ(frameCount * 0.002);
+//       cone(30,30);
+//       pop();  
+//     }
+   // }
 
-    var len = v.mag() * scale;
-    line(0,0,len,0);
-    line(len,0,len-arrowsize,+arrowsize/2);
-    line(len,0,len-arrowsize,-arrowsize/2);
-    pop();
-}
-//========= PARTICLE SYSTEM ===========
+     //  push();
+     //  var a = j/12 * PI;
+     //  var b = i/12 * PI;
+     //  var x = sin(2 * a) * radius * sin(b); 
+     //  var y = cos(b) * radius / 2 ;
+     //  var z = cos(2 * a) * radius * sin(b); 
+     //  translate(x,y,z); 
+     // // translate(sin(frameCount * 0.001 + j) * 100, sin(frameCount * 0.001 + j) * 100, i * 0.1);
+     //  var x1 = sin(frameCount * 0.001 + j) * 200;
+     //  var y1 = sin(frameCount * 0.001 + j) * 100;
+     //  translate(x1, y1, y1);  
 
-/**
- * A basic particle system class
- * @param num the number of particles
- * @param v the origin of the particle system
- * @param img_ a texture for each particle in the system
- * @constructor
- */
-var ParticleSystem = function(num,v,img_) {
+     //  cone(30, 30);  
 
-    this.particles = [];
-    this.origin = v.copy(); // we make sure to copy the vector value in case we accidentally mutate the original by accident
-    this.img = img_
-    for(var i = 0; i < num; ++i){
-        this.particles.push(new Particle(this.origin,this.img));
-    }
-};
+     //  pop();
 
-/**
- * This function runs the entire particle system.
- */
-ParticleSystem.prototype.run = function() {
+  // for(var i = 0; i <= 12; i++){
+  //   for(var j = 0; j <= 12; j++){
+  //     push();
+  //     var a = j/12 * PI;
+  //     var b = i/12 * PI;
+  //     translate(sin(2 * a) * radius * sin(b), cos(b) * radius / 2 , cos(2 * a) * radius * sin(b));    
+  //     rotateY(1.25);
+  //     cone(30, 30);  
 
-    // cache length of the array we're going to loop into a variable
-    // You may see <variable>.length in a for loop, from time to time but
-    // we cache it here because otherwise the length is re-calculated for each iteration of a loop
-    var len = this.particles.length;
-
-    //loop through and run particles
-    for (var i = len - 1; i >= 0; i--) {
-        var particle = this.particles[i];
-        particle.run();
-
-        // if the particle is dead, we remove it.
-        // javascript arrays don't have a "remove" function but "splice" works just as well.
-        // we feed it an index to start at, then how many numbers from that point to remove.
-        if (particle.isDead()) {
-            this.particles.splice(i,1);
-        }
-    }
-}
-
-/**
- * Method to add a force vector to all particles currently in the system
- * @param dir a p5.Vector describing the direction of the force.
- */
-ParticleSystem.prototype.applyForce = function(dir) {
-    var len = this.particles.length;
-    for(var i = 0; i < len; ++i){
-        this.particles[i].applyForce(dir);
-    }
-}
-
-/**
- * Adds a new particle to the system at the origin of the system and with
- * the originally set texture.
- */
-ParticleSystem.prototype.addParticle = function() {
-    this.particles.push(new Particle(this.origin,this.img));
-}
-
-//========= PARTICLE  ===========
-/**
- *  A simple Particle class, renders the particle as an image
- */
-var Particle = function (pos, img_) {
-    this.loc = pos.copy();
-
-    var vx = randomGaussian() * 0.3;
-    var vy = randomGaussian() * 0.3 - 1.0;
-
-    this.vel = createVector(vx,vy);
-    this.acc = createVector();
-    this.lifespan = 100.0;
-    this.texture = img_;
-}
-
-/**
- *  Simulataneously updates and displays a particle.
- */
-Particle.prototype.run = function() {
-    this.update();
-    this.render();
-}
-
-/**
- *  A function to display a particle
- */
-Particle.prototype.render = function() {
-    imageMode(CENTER);
-    tint(255,this.lifespan);
-    image(this.texture,this.loc.x,this.loc.y);
-}
-
-/**
- *  A method to apply a force vector to a particle.
- */
-Particle.prototype.applyForce = function(f) {
-    this.acc.add(f);
-}
-
-/**
- *  This method checks to see if the particle has reached the end of it's lifespan,
- *  if it has, return true, otherwise return false.
- */
-Particle.prototype.isDead = function () {
-    if (this.lifespan <= 0.0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- *  This method updates the position of the particle.
- */
-Particle.prototype.update = function() {
-    this.vel.add(this.acc);
-    this.loc.add(this.vel);
-    this.lifespan -= 2.5;
-    this.acc.mult(0);
-}
+  //     pop();
+  //   }
+  // }
